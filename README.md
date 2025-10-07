@@ -29,7 +29,8 @@
 
 - ✅ Recebe dados de coleções MongoDB via API REST
 - ✅ Armazena backups em banco de dados dedicado
-- ✅ Adiciona metadados automáticos (data, URL, etc.)
+- ✅ Mantém logs de backup em coleção separada (`backup_logs`)
+- ✅ Substitui dados antigos automaticamente (drop e insert)
 - ✅ Protege endpoints com autenticação Basic Auth
 - ✅ Oferece endpoint de health check para monitoramento
 
@@ -49,7 +50,7 @@
 | Recurso | Descrição |
 |---------|-----------|
 | 🔐 **Autenticação Segura** | Basic Auth para proteger todos os endpoints |
-| 📊 **Metadados Automáticos** | Data e URL adicionados automaticamente aos backups |
+| 📊 **Sistema de Logs** | Logs de backup armazenados em coleção separada |
 | 🔄 **Substituição Inteligente** | Sobrescreve backups antigos automaticamente |
 | 🏥 **Health Check** | Endpoint dedicado para monitoramento |
 | 📝 **TypeScript** | Código totalmente tipado para maior segurança |
@@ -106,7 +107,7 @@ SECRET_USER=seu_usuario
 SECRET_PASS=sua_senha
 
 # Conexão MongoDB
-MONGODB_URI=mongodb://localhost:27017
+MONGO_URI=mongodb://localhost:27017
 ```
 
 > ⚠️ **Importante**: Nunca commite o arquivo `.env` no repositório. Ele já está incluído no `.gitignore`.
@@ -277,11 +278,13 @@ Authorization: Basic <credenciais_base64>
   "statusCode": 200,
   "message": "Backup salvo com sucesso",
   "data": {
-    "database": "nome_do_banco",
-    "collectionsName": "nome_da_colecao",
-    "data": { /* seus dados */ },
-    "date": "07/10/2025",
-    "url": "http://localhost:3000/api/backup"
+    "itemCount": 1,
+    "log": {
+      "database": "nome_do_banco",
+      "collectionsName": "nome_da_colecao",
+      "date": "07/10/2025",
+      "timestamp": "2025-10-07T14:30:00.000Z"
+    }
   }
 }
 ```
@@ -533,7 +536,10 @@ graph LR
 | **Substituição Automática** | A coleção de dados é **dropada** antes de inserir novos dados (sobrescreve backup anterior) |
 | **Separação de Dados e Logs** | Dados são salvos na coleção especificada, logs em `backup_logs` |
 | **Logs Persistentes** | A coleção `backup_logs` é atualizada (upsert) a cada backup bem-sucedido |
-| **Metadados de Log** | Armazena `date`, `url`, `collectionsName` e `timestamp` na coleção de logs |
+| **Metadados de Log** | Armazena `database`, `collectionsName`, `date` e `timestamp` na coleção de logs |
+| **Contagem de Itens** | Retorna a quantidade de itens salvos ao invés dos dados completos |
+| **Sanitização de Dados** | Remove automaticamente chaves que começam com `$` (reservadas pelo MongoDB) |
+| **Inserção Otimizada** | Usa `insertMany` para arrays e `insertOne` para objetos únicos |
 | **Formato da Data** | DD/MM/YYYY (formato brasileiro) |
 | **Dados Puros** | Apenas os dados (arrays/objetos) são salvos na coleção principal |
 
@@ -563,12 +569,33 @@ graph LR
 
 ```json
 {
+  "database": "backup_db",
   "collectionsName": "users",
   "date": "07/10/2025",
-  "url": "http://localhost:3000/api/backup",
   "timestamp": "2025-10-07T14:30:00.000Z"
 }
 ```
+
+**Retorno da API:**
+
+```json
+{
+  "status": "success",
+  "statusCode": 200,
+  "message": "Backup salvo com sucesso",
+  "data": {
+    "itemCount": 1,
+    "log": {
+      "database": "backup_db",
+      "collectionsName": "users",
+      "date": "07/10/2025",
+      "timestamp": "2025-10-07T14:30:00.000Z"
+    }
+  }
+}
+```
+
+> 💡 **Nota**: A API retorna `itemCount` com a quantidade de documentos inseridos, não os dados completos. Para arrays, retorna o tamanho do array; para objetos, retorna 1.
 
 ---
 
@@ -656,7 +683,7 @@ Certifique-se de configurar as seguintes variáveis no ambiente de produção:
 PORT=3000
 SECRET_USER=seu_usuario_seguro
 SECRET_PASS=sua_senha_complexa
-MONGODB_URI=mongodb://seu-servidor:27017
+MONGO_URI=mongodb://seu-servidor:27017
 ```
 
 ### Docker (Opcional)
@@ -697,7 +724,7 @@ services:
       - PORT=3000
       - SECRET_USER=${SECRET_USER}
       - SECRET_PASS=${SECRET_PASS}
-      - MONGODB_URI=mongodb://mongo:27017
+      - MONGO_URI=mongodb://mongo:27017
     depends_on:
       - mongo
     restart: unless-stopped
@@ -752,15 +779,18 @@ Contribuições são muito bem-vindas! Este projeto segue o padrão de [Conventi
 
 ## 📝 Changelog
 
-### [1.0.0] - 2025-10-07
+### Versão Atual: 2.0.1
 
-#### Adicionado
+Para ver o histórico completo de mudanças, consulte o arquivo [CHANGELOG.md](CHANGELOG.md).
 
-- Sistema de backup automatizado para MongoDB
-- Autenticação Basic Auth
-- Endpoint de health check
-- Testes unitários com Jest
-- Documentação completa
+#### Últimas Mudanças (v2.0.1)
+
+- **� Corrigido**: Deprecation warning do `collection.insert`
+- **🐛 Corrigido**: Erro "key $numberDecimal must not start with '$'"
+- **✨ Novo**: Sanitização automática de dados
+- **✨ Novo**: Uso de `insertMany` e `insertOne` otimizados
+
+[Ver changelog completo →](CHANGELOG.md)
 
 ---
 

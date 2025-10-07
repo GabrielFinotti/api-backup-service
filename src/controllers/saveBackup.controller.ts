@@ -6,7 +6,6 @@ const saveBackupController = async (req: Request, res: Response) => {
   try {
     const backupDataService = new BackupService();
     const body = req.body as BackupDataInputDTO;
-    const requestUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
 
     if (!body) {
       return res.status(400).json({
@@ -17,7 +16,7 @@ const saveBackupController = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await backupDataService.saveBackup(body, requestUrl);
+    const result = await backupDataService.saveBackup(body);
 
     return res.status(result.statusCode).json(result);
   } catch (error) {
