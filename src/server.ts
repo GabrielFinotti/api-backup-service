@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import authMiddleware from "./middlewares/auth.middleware";
 import backupRoute from "./routes/backup.route";
 
-dotenv.config({ quiet: true });
+dotenv.config({ quiet: process.env.NODE_ENV === "production" });
 
 const app = express();
 const PORT = process.env.PORT;
