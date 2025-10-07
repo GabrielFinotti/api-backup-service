@@ -5,6 +5,47 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.2.0] - 2025-10-07
+
+### 🐳 Adicionado
+
+- **Suporte completo ao Docker**:
+  - Dockerfile otimizado com multi-stage build
+  - docker-compose.yml para orquestração
+  - .dockerignore para otimização do build
+  - Health checks configurados no container
+  
+- **Configuração para MongoDB Externo**:
+  - Conexão via domínio/URI externa
+  - Suporte a MongoDB Atlas, Cloud e servidores remotos
+  - Variável MONGO_URI configurável via .env
+
+- **Scripts NPM para Docker**:
+  - `npm run docker:up` - Inicia containers
+  - `npm run docker:down` - Para containers
+  - `npm run docker:logs` - Visualiza logs
+  - `npm run docker:build` - Reconstrói imagens
+  - `npm run docker:restart` - Reinicia containers
+
+### 📝 Melhorado
+
+- Documentação simplificada no README.md
+- Seção de uso rápido com Docker
+- .env.example atualizado com exemplos de MONGO_URI
+- Instruções de deploy atualizadas
+
+### 🗑️ Removido
+
+- Arquivos de documentação redundantes (DOCKER.md, DOCKER-QUICKSTART.md)
+- Configuração de MongoDB em container (agora apenas externo)
+- Volumes e networks desnecessários do docker-compose
+
+### 🔧 Modificado
+
+- docker-compose.yml simplificado (apenas API, MongoDB externo)
+- .env.example com foco em MongoDB externo
+- README.md com seção Docker concisa
+
 ## [2.1.0] - 2025-10-07
 
 ### ✨ Adicionado

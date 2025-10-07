@@ -122,7 +122,34 @@ MONGO_URI=mongodb://localhost:27017
 
 ## 🚀 Guia de Uso Rápido
 
-### Comandos Disponíveis
+### 🐳 Usando Docker
+
+```bash
+# 1. Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas credenciais
+
+# 2. Inicie o container
+docker-compose up -d
+
+# 3. Verifique o status
+docker-compose ps
+
+# 4. Ver logs
+docker-compose logs -f
+
+# 5. Parar o container
+docker-compose down
+```
+
+### � Instalação Local
+
+#### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [MongoDB](https://www.mongodb.com/) (versão 5.x ou superior)
+
+#### Comandos Disponíveis
 
 | Comando | Descrição |
 |---------|-----------|
@@ -131,7 +158,7 @@ MONGO_URI=mongodb://localhost:27017
 | `npm start` | Inicia o servidor em modo produção |
 | `npm test` | Executa a suíte de testes |
 
-### Desenvolvimento
+#### Desenvolvimento
 
 Inicie o servidor em modo de desenvolvimento:
 
@@ -141,7 +168,7 @@ npm run dev
 
 O servidor estará disponível em `http://localhost:3000`
 
-### Produção
+#### Produção
 
 Para executar em produção:
 
@@ -927,62 +954,13 @@ SECRET_PASS=sua_senha_complexa
 MONGO_URI=mongodb://seu-servidor:27017
 ```
 
-### Docker (Opcional)
+### Recomendações para Produção
 
-<details>
-<summary>Exemplo de Dockerfile</summary>
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
-```
-
-</details>
-
-<details>
-<summary>Exemplo de docker-compose.yml</summary>
-
-```yaml
-version: '3.8'
-
-services:
-  api:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - PORT=3000
-      - SECRET_USER=${SECRET_USER}
-      - SECRET_PASS=${SECRET_PASS}
-      - MONGO_URI=mongodb://mongo:27017
-    depends_on:
-      - mongo
-    restart: unless-stopped
-
-  mongo:
-    image: mongo:5
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    restart: unless-stopped
-
-volumes:
-  mongo-data:
-```
-
-</details>
+- ✅ **Use HTTPS**: Sempre configure SSL/TLS
+- ✅ **Credenciais Fortes**: Use senhas complexas e únicas
+- ✅ **Firewall**: Configure regras de firewall adequadas
+- ✅ **Monitoramento**: Implemente logs e alertas
+- ✅ **Backup**: Configure backup regular do MongoDB
 
 ---
 
@@ -1020,16 +998,17 @@ Contribuições são muito bem-vindas! Este projeto segue o padrão de [Conventi
 
 ## 📝 Changelog
 
-### Versão Atual: 2.0.1
+### Versão Atual: 2.2.0
 
 Para ver o histórico completo de mudanças, consulte o arquivo [CHANGELOG.md](CHANGELOG.md).
 
-#### Últimas Mudanças (v2.0.1)
+#### Últimas Mudanças (v2.2.0)
 
-- **� Corrigido**: Deprecation warning do `collection.insert`
-- **🐛 Corrigido**: Erro "key $numberDecimal must not start with '$'"
-- **✨ Novo**: Sanitização automática de dados
-- **✨ Novo**: Uso de `insertMany` e `insertOne` otimizados
+- **🐳 Novo**: Suporte completo ao Docker com docker-compose
+- **� Novo**: Configuração para MongoDB externo via domínio
+- **📦 Novo**: Scripts npm para gerenciar containers Docker
+- **📝 Melhorado**: Documentação simplificada e direta
+- **🗑️ Removido**: Arquivos de documentação redundantes
 
 [Ver changelog completo →](CHANGELOG.md)
 
