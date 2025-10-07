@@ -520,20 +520,22 @@ graph LR
     B -->|Autentica| C{Válido?}
     C -->|Não| D[401 Unauthorized]
     C -->|Sim| E[Conecta MongoDB]
-    E --> F[Drop Coleção]
-    F --> G[Insere Dados + Metadados]
-    G --> H[200 Success]
+    E --> F[Drop Coleção de Dados]
+    F --> G[Insere Dados]
+    G --> H[Atualiza backup_logs]
+    H --> I[200 Success]
 ```
 
 ### Características do Backup
 
 | Característica | Descrição |
 |----------------|-----------|
-| **Substituição Automática** | A coleção é **dropada** antes de inserir novos dados (sobrescreve backup anterior) |
-| **Metadados Automáticos** | Adiciona automaticamente `date` e `url` aos dados |
+| **Substituição Automática** | A coleção de dados é **dropada** antes de inserir novos dados (sobrescreve backup anterior) |
+| **Separação de Dados e Logs** | Dados são salvos na coleção especificada, logs em `backup_logs` |
+| **Logs Persistentes** | A coleção `backup_logs` é atualizada (upsert) a cada backup bem-sucedido |
+| **Metadados de Log** | Armazena `date`, `url`, `collectionsName` e `timestamp` na coleção de logs |
 | **Formato da Data** | DD/MM/YYYY (formato brasileiro) |
-| **URL Completa** | Armazena URL completa da requisição para rastreabilidade |
-| **Preservação de Dados** | Os dados originais são preservados junto com metadados |
+| **Dados Puros** | Apenas os dados (arrays/objetos) são salvos na coleção principal |
 
 ### Exemplo de Dados Armazenados
 
@@ -549,17 +551,22 @@ graph LR
 }
 ```
 
-**Armazenado no MongoDB:**
+**Armazenado na Coleção `users` (dados apenas):**
 
 ```json
 {
-  "database": "backup_db",
+  "users": [{"id": 1, "name": "João"}]
+}
+```
+
+**Armazenado na Coleção `backup_logs` (metadados):**
+
+```json
+{
   "collectionsName": "users",
-  "data": {
-    "users": [{"id": 1, "name": "João"}]
-  },
   "date": "07/10/2025",
-  "url": "http://localhost:3000/api/backup"
+  "url": "http://localhost:3000/api/backup",
+  "timestamp": "2025-10-07T14:30:00.000Z"
 }
 ```
 

@@ -24,8 +24,17 @@ describe("BackupService", () => {
         insertOne: jest.fn().mockResolvedValue(undefined),
       };
 
+      const mockLogsCollection = {
+        updateOne: jest.fn().mockResolvedValue(undefined),
+      };
+
       const mockDb = {
-        collection: jest.fn().mockReturnValue(mockCollection),
+        collection: jest.fn((name: string) => {
+          if (name === "backup_logs") {
+            return mockLogsCollection;
+          }
+          return mockCollection;
+        }),
       };
 
       const mockConnection = {
@@ -47,21 +56,34 @@ describe("BackupService", () => {
 
       expect(mockCreateMongoConnection).toHaveBeenCalledWith("testDB");
       expect(mockDb.collection).toHaveBeenCalledWith("testCollection");
+      expect(mockDb.collection).toHaveBeenCalledWith("backup_logs");
       expect(mockCollection.drop).toHaveBeenCalled();
-      expect(mockCollection.insertOne).toHaveBeenCalledWith({
-        ...input,
-        date: expect.any(String),
-        url,
-      });
+      expect(mockCollection.insertOne).toHaveBeenCalledWith(input.data);
+      expect(mockLogsCollection.updateOne).toHaveBeenCalledWith(
+        { collectionsName: "testCollection" },
+        {
+          $set: expect.objectContaining({
+            collectionsName: "testCollection",
+            date: expect.any(String),
+            url,
+            timestamp: expect.any(Date),
+          }),
+        },
+        { upsert: true }
+      );
       expect(mockConnection.disconnect).toHaveBeenCalled();
       expect(result).toEqual({
         status: "success",
         statusCode: 200,
         message: "Backup salvo com sucesso",
         data: expect.objectContaining({
-          ...input,
-          date: expect.any(String),
-          url,
+          ...input.data,
+          log: expect.objectContaining({
+            collectionsName: "testCollection",
+            date: expect.any(String),
+            url,
+            timestamp: expect.any(Date),
+          }),
         }),
       });
     });
