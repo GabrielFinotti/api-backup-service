@@ -4,7 +4,7 @@
   "description": "Um serviço para realizar uma ponte de backup de dados",
   "main": "server.js",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --dts",
+    "build": "tsup src/server.ts --format cjs --dts",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "test": "jest",
