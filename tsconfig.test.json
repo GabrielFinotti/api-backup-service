@@ -5,8 +5,20 @@
     "noUnusedParameters": false,
     "sourceMap": true,
     "inlineSourceMap": false,
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "importHelpers": false,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/test/**/*"],
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/test/**/*",
+    "test/**/*"
+  ],
   "exclude": ["node_modules", "dist"]
 }

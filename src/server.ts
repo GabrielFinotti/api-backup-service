@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import createMongoConnection from "./database/config/createConnection";
 
 dotenv.config({ quiet: true });
 
@@ -19,8 +18,6 @@ app.get("/health", (_req, res) => {
 
 app.listen(PORT, async () => {
   try {
-    await createMongoConnection("backup_service");
-
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
   } catch (error) {
     console.error("Falha ao iniciar o servidor:", error);
