@@ -5,6 +5,56 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.1.0] - 2025-10-07
+
+### ✨ Adicionado
+
+- **Endpoint POST `/api/recover`**: Recupera todos os dados de uma coleção específica
+  - Parâmetros: `database` e `collectionName`
+  - Retorna: contagem de documentos e array com todos os documentos
+  - Controller: `recoverData.controller.ts`
+  - Service: método `recoverData` no `BackupService`
+
+- **Endpoint POST `/api/logs`**: Lista todos os logs de backup de um database
+  - Parâmetro: `database`
+  - Retorna: contagem de logs e array com todos os registros de backup
+  - Controller: `getLogs.controller.ts`
+  - Service: método `getLogs` no `BackupService`
+
+- **Endpoint GET `/api/databases`**: Lista todos os databases do MongoDB
+  - Sem parâmetros (requer autenticação)
+  - Retorna: lista com nome, tamanho e status de cada database
+  - Controller: `getDatabases.controller.ts`
+  - Service: método `getDatabases` no `BackupService`
+
+- **Novos DTOs**:
+  - `RecoverDataDTO`: Interface para recuperação de dados
+  - `GetLogsDTO`: Interface para consulta de logs
+
+### 🧪 Testes
+
+- Adicionados 10 testes para `saveBackup.controller.test.ts`
+- Adicionados 6 testes para `recoverData.controller.test.ts`
+- Adicionados 6 testes para `getLogs.controller.test.ts`
+- Adicionados 6 testes para `getDatabases.controller.test.ts`
+- Adicionados 10 testes no `backup.service.test.ts` para os novos métodos
+- **Total: 49 testes** (eram 11, agora são 49)
+- **Taxa de sucesso: 100%**
+
+### 📚 Documentação
+
+- README.md atualizado com documentação completa dos novos endpoints
+- Exemplos de uso adicionados para cada endpoint
+- Tabela de endpoints atualizada com os 5 endpoints disponíveis
+- Características atualizadas com as novas funcionalidades
+
+### 🔄 Modificado
+
+- Estrutura de testes melhorada com cobertura completa de controllers
+- Interfaces organizadas no arquivo `backupDataInput.dto.ts`
+
+---
+
 ## [2.0.1] - 2025-10-07
 
 ### 🐛 Corrigido

@@ -3,3 +3,12 @@ export type BackupDataInputDTO = {
   collectionsName: string;
   data: any;
 };
+
+export type RecoverDataDTO = {
+  database: string;
+  collectionName: string;
+};
+
+export type GetLogsDTO = {
+  database: string;
+};

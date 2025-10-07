@@ -33,6 +33,9 @@
 - ✅ Substitui dados antigos automaticamente (drop e insert)
 - ✅ Protege endpoints com autenticação Basic Auth
 - ✅ Oferece endpoint de health check para monitoramento
+- ✅ **NOVO:** Recupera dados de coleções específicas
+- ✅ **NOVO:** Consulta logs de backup por database
+- ✅ **NOVO:** Lista todos os databases do MongoDB
 
 ### 🎯 Casos de Uso
 
@@ -54,7 +57,10 @@
 | 🔄 **Substituição Inteligente** | Sobrescreve backups antigos automaticamente |
 | 🏥 **Health Check** | Endpoint dedicado para monitoramento |
 | 📝 **TypeScript** | Código totalmente tipado para maior segurança |
-| ✅ **Testado** | Suíte de testes com Jest |
+| ✅ **Testado** | Suíte completa de testes com Jest (49 testes) |
+| 🔍 **Recuperação de Dados** | Recupere dados de qualquer coleção |
+| 📋 **Gestão de Logs** | Consulte logs de backup por database |
+| 🗄️ **Listagem de Databases** | Visualize todos os databases disponíveis |
 
 ### Stack Tecnológica
 
@@ -195,6 +201,18 @@ echo -n "admin:password123" | base64
 
 ### 📍 Endpoints Disponíveis
 
+#### 📊 Visão Geral
+
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| GET | `/api/health` | Health check da API | ❌ |
+| POST | `/api/backup` | Salvar backup de uma coleção | ✅ |
+| POST | `/api/recover` | Recuperar dados de uma coleção | ✅ |
+| POST | `/api/logs` | Listar logs de backup de um banco | ✅ |
+| GET | `/api/databases` | Listar todos os databases MongoDB | ✅ |
+
+---
+
 <details>
 <summary><strong>GET</strong> <code>/api/health</code> - Health Check</summary>
 
@@ -332,6 +350,229 @@ Authorization: Basic <credenciais_base64>
 ```
 
 </details>
+
+</details>
+
+---
+
+<details>
+<summary><strong>POST</strong> <code>/api/recover</code> - Recuperar Dados</summary>
+
+<br>
+
+Recupera todos os dados de uma coleção específica.
+
+**Autenticação:** ✅ Requerida (Basic Auth)
+
+**Headers:**
+
+```http
+Content-Type: application/json
+Authorization: Basic <credenciais_base64>
+```
+
+**Body (JSON):**
+
+```json
+{
+  "database": "nome_do_banco",
+  "collectionName": "nome_da_colecao"
+}
+```
+
+**Parâmetros:**
+
+| Campo | Tipo | Descrição | Obrigatório |
+|-------|------|-----------|:-----------:|
+| `database` | `string` | Nome do banco de dados MongoDB | ✅ |
+| `collectionName` | `string` | Nome da coleção a ser recuperada | ✅ |
+
+**Resposta de Sucesso (200):**
+
+```json
+{
+  "status": "success",
+  "statusCode": 200,
+  "message": "Dados recuperados com sucesso",
+  "data": {
+    "collectionName": "nome_da_colecao",
+    "database": "nome_do_banco",
+    "documentCount": 150,
+    "documents": [
+      {
+        "_id": "507f1f77bcf86cd799439011",
+        "campo1": "valor1",
+        "campo2": "valor2"
+      }
+    ]
+  }
+}
+```
+
+**Exemplo cURL:**
+
+```bash
+curl -X POST http://localhost:3000/api/recover \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM=" \
+  -d '{
+    "database": "meu_backup_db",
+    "collectionName": "usuarios_backup"
+  }'
+```
+
+</details>
+
+---
+
+<details>
+<summary><strong>POST</strong> <code>/api/logs</code> - Listar Logs de Backup</summary>
+
+<br>
+
+Recupera todos os logs de backup de um banco de dados específico.
+
+**Autenticação:** ✅ Requerida (Basic Auth)
+
+**Headers:**
+
+```http
+Content-Type: application/json
+Authorization: Basic <credenciais_base64>
+```
+
+**Body (JSON):**
+
+```json
+{
+  "database": "nome_do_banco"
+}
+```
+
+**Parâmetros:**
+
+| Campo | Tipo | Descrição | Obrigatório |
+|-------|------|-----------|:-----------:|
+| `database` | `string` | Nome do banco de dados MongoDB | ✅ |
+
+**Resposta de Sucesso (200):**
+
+```json
+{
+  "status": "success",
+  "statusCode": 200,
+  "message": "Logs recuperados com sucesso",
+  "data": {
+    "database": "meu_backup_db",
+    "logCount": 3,
+    "logs": [
+      {
+        "database": "meu_backup_db",
+        "collectionsName": "usuarios_backup",
+        "date": "07/10/2025",
+        "timestamp": "2025-10-07T14:30:00.000Z"
+      },
+      {
+        "database": "meu_backup_db",
+        "collectionsName": "produtos_backup",
+        "date": "07/10/2025",
+        "timestamp": "2025-10-07T13:15:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+**Exemplo cURL:**
+
+```bash
+curl -X POST http://localhost:3000/api/logs \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM=" \
+  -d '{
+    "database": "meu_backup_db"
+  }'
+```
+
+</details>
+
+---
+
+<details>
+<summary><strong>GET</strong> <code>/api/databases</code> - Listar Databases</summary>
+
+<br>
+
+Lista todos os databases disponíveis no MongoDB.
+
+**Autenticação:** ✅ Requerida (Basic Auth)
+
+**Headers:**
+
+```http
+Authorization: Basic <credenciais_base64>
+```
+
+**Resposta de Sucesso (200):**
+
+```json
+{
+  "status": "success",
+  "statusCode": 200,
+  "message": "Databases recuperados com sucesso",
+  "data": {
+    "databaseCount": 3,
+    "databases": [
+      {
+        "name": "admin",
+        "sizeOnDisk": 40960,
+        "empty": false
+      },
+      {
+        "name": "meu_backup_db",
+        "sizeOnDisk": 8192000,
+        "empty": false
+      },
+      {
+        "name": "local",
+        "sizeOnDisk": 73728,
+        "empty": false
+      }
+    ]
+  }
+}
+```
+
+**Informações Retornadas:**
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `name` | `string` | Nome do database |
+| `sizeOnDisk` | `number` | Tamanho em bytes no disco |
+| `empty` | `boolean` | Se o database está vazio |
+
+**Exemplo cURL:**
+
+```bash
+curl -X GET http://localhost:3000/api/databases \
+  -H "Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM="
+```
+
+**Exemplo JavaScript:**
+
+```javascript
+const credentials = btoa('admin:password123');
+
+fetch('http://localhost:3000/api/databases', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Basic ${credentials}`
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log('Databases:', data))
+  .catch(error => console.error('Erro:', error));
+```
 
 </details>
 
