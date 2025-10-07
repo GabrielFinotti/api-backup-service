@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import authMiddleware from "./middlewares/auth.middleware";
+import backupRoute from "./routes/backup.route";
 
 dotenv.config({ quiet: true });
 
@@ -12,9 +14,11 @@ if (!PORT) {
 
 app.use(express.json());
 
-app.get("/health", (_req, res) => {
+app.get("/api/health", (_, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+app.use("/api", authMiddleware, backupRoute);
 
 app.listen(PORT, async () => {
   try {

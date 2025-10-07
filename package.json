@@ -1,7 +1,7 @@
 {
   "name": "api-backup-service",
   "version": "1.0.0",
-  "description": "Um serviço para realizar um ponte de backup de dados",
+  "description": "Um serviço para realizar uma ponte de backup de dados",
   "main": "server.js",
   "scripts": {
     "build": "tsup src/index.ts --format cjs --dts",
@@ -10,8 +10,8 @@
     "test": "jest"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Gabriel H. Finotti",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@types/express": "^5.0.3",
