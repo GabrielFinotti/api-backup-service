@@ -2,11 +2,11 @@
   "name": "api-backup-service",
   "version": "2.2.0",
   "description": "Um serviço para realizar uma ponte de backup de dados",
-  "main": "server.js",
+  "main": "server.cjs",
   "scripts": {
     "build": "tsup src/server.ts --format cjs --dts",
     "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.js",
+    "start": "node dist/server.cjs",
     "test": "jest",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
