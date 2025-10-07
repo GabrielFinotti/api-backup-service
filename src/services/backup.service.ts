@@ -7,6 +7,7 @@ class BackupService {
       const newConnection = await createMongoConnection(data.database);
       const db = newConnection.connection.db;
       const collection = db.collection(data.collectionsName);
+      const logsCollection = db.collection("backup_logs");
 
       console.log("Iniciando o processo de backup...");
 
@@ -20,17 +21,26 @@ class BackupService {
         console.log("Coleção não encontrada, criando uma nova...");
       }
 
-      const backupData: BackupDataInputDTO & { date: string; url: string } = {
-        ...data,
+      // Salva apenas os dados (arrays) na coleção principal
+      await collection.insertOne(data.data);
+
+      // Atualiza os logs em uma coleção separada
+      const logEntry = {
+        collectionsName: data.collectionsName,
         date: new Date().toLocaleDateString("pt-BR", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
         }),
         url,
+        timestamp: new Date(),
       };
 
-      await collection.insertOne(backupData);
+      await logsCollection.updateOne(
+        { collectionsName: data.collectionsName },
+        { $set: logEntry },
+        { upsert: true }
+      );
 
       await newConnection.disconnect();
 
@@ -38,7 +48,7 @@ class BackupService {
         status: "success",
         statusCode: 200,
         message: "Backup salvo com sucesso",
-        data: backupData,
+        data: { ...data.data, log: logEntry },
       };
     } catch (error) {
       if (error instanceof Error) {
