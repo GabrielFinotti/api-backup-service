@@ -34,4 +34,30 @@ const createMongoConnection = async (dbName: string) => {
   }
 };
 
+export const testConnection = async (): Promise<boolean> => {
+  try {
+    console.log("Testando conexão com MongoDB...");
+
+    const instance = await mongoose.connect(process.env.MONGO_URI as string, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+    });
+
+    console.log(" Conexão com MongoDB estabelecida com sucesso!");
+
+    await instance.disconnect();
+
+    return true;
+  } catch (error) {
+    if (error instanceof mongoose.Error) {
+      console.error(`Falha ao conectar ao MongoDB: ${error.message}`);
+    } else {
+      console.error(`Erro desconhecido ao testar conexão: ${error}`);
+    }
+
+    return false;
+  }
+};
+
 export default createMongoConnection;

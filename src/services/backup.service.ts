@@ -225,7 +225,6 @@ class BackupService {
     try {
       console.log("Conectando ao MongoDB para listar databases...");
 
-      // Cria uma conexão temporária com um database admin
       const adminConnection = await mongoose.connect(
         process.env.MONGO_URI as string,
         {
