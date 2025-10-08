@@ -5,10 +5,12 @@
 ### Serviço de Backup Automatizado para MongoDB
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/Version-2.2.1-blue.svg)](https://github.com/GabrielFinotti/api-backup-service/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-5.1-lightgrey.svg)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-5.x-brightgreen.svg)](https://www.mongodb.com/)
+[![Tests](https://img.shields.io/badge/Tests-49%20passed-success.svg)](https://github.com/GabrielFinotti/api-backup-service)
 
 [Características](#-características) •
 [Instalação](#-instalação) •
@@ -998,17 +1000,16 @@ Contribuições são muito bem-vindas! Este projeto segue o padrão de [Conventi
 
 ## 📝 Changelog
 
-### Versão Atual: 2.2.0
+### Versão Atual: 2.2.1
 
 Para ver o histórico completo de mudanças, consulte o arquivo [CHANGELOG.md](CHANGELOG.md).
 
-#### Últimas Mudanças (v2.2.0)
+#### Últimas Mudanças (v2.2.1)
 
-- **🐳 Novo**: Suporte completo ao Docker com docker-compose
-- **� Novo**: Configuração para MongoDB externo via domínio
-- **📦 Novo**: Scripts npm para gerenciar containers Docker
-- **📝 Melhorado**: Documentação simplificada e direta
-- **🗑️ Removido**: Arquivos de documentação redundantes
+- **� Correções**: Health check dinâmico com variável PORT no Dockerfile
+- **🐛 Correções**: Inicialização do servidor simplificada e mais resiliente
+- **�️ Removido**: Função `testConnection` desnecessária
+- **📝 Melhorado**: Redução de overhead e complexidade no startup
 
 [Ver changelog completo →](CHANGELOG.md)
 

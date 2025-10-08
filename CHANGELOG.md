@@ -5,6 +5,39 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.2.1] - 2025-10-08
+
+### 🐛 Corrigido
+
+- **Health check no Dockerfile**: Agora usa variável de ambiente `PORT` dinamicamente ao invés de porta hardcoded
+  - Antes: `http://localhost:3000/api/health`
+  - Agora: `http://localhost:${PORT}/api/health`
+  - Permite flexibilidade na configuração da porta
+
+- **Inicialização do servidor**: Removida verificação de conexão MongoDB no startup
+  - Conexão é testada apenas quando necessária (lazy connection)
+  - Reduz tempo de inicialização e melhora reliability
+  - Servidor não falha mais no startup se MongoDB estiver temporariamente indisponível
+
+### 🗑️ Removido
+
+- **Função `testConnection`**: Removida de `createConnection.ts`
+  - Simplifica lógica de inicialização
+  - Conexão é estabelecida sob demanda
+  - Reduz complexidade e overhead desnecessário
+
+### 📝 Melhorado
+
+- **docker-compose.yml**: Ajustes no health check e formatação
+  - Health check usa variável `$PORT` dinâmica
+  - Melhor consistência com configurações do Dockerfile
+  - Configuração de rede externa otimizada
+
+- **Inicialização do servidor**: Refatorada para ser mais simples e resiliente
+  - Função `startServer` assíncrona separada
+  - Melhor tratamento de erros
+  - Logs mais claros
+
 ## [2.2.0] - 2025-10-07
 
 ### 🐳 Adicionado
@@ -205,6 +238,9 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ---
 
+[2.2.1]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.2.0...v2.2.1
+[2.2.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/GabrielFinotti/api-backup-service/releases/tag/v1.0.0
