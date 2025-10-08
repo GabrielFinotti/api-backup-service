@@ -32,8 +32,6 @@ app.listen(PORT, async () => {
     }
 
     console.log(`Servidor rodando na porta ${PORT}`);
-
-    process.exit(0);
   } catch (error) {
     console.error("Falha ao iniciar o servidor:", error);
 
