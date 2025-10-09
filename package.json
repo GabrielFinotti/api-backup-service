@@ -1,6 +1,6 @@
 {
   "name": "api-backup-service",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Um serviço para realizar uma ponte de backup de dados",
   "main": "server.cjs",
   "scripts": {

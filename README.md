@@ -5,7 +5,7 @@
 ### Serviço de Backup Automatizado para MongoDB
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-2.2.1-blue.svg)](https://github.com/GabrielFinotti/api-backup-service/releases)
+[![Version](https://img.shields.io/badge/Version-2.3.0-blue.svg)](https://github.com/GabrielFinotti/api-backup-service/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-5.1-lightgrey.svg)](https://expressjs.com/)
@@ -63,6 +63,7 @@
 | 🔍 **Recuperação de Dados** | Recupere dados de qualquer coleção |
 | 📋 **Gestão de Logs** | Consulte logs de backup por database |
 | 🗄️ **Listagem de Databases** | Visualize todos os databases disponíveis |
+| 📦 **Grande Capacidade** | Suporta payloads de até 1000mb (1GB) para backups volumosos |
 
 ### Stack Tecnológica
 
@@ -812,6 +813,7 @@ graph LR
 | **Inserção Otimizada** | Usa `insertMany` para arrays e `insertOne` para objetos únicos |
 | **Formato da Data** | DD/MM/YYYY (formato brasileiro) |
 | **Dados Puros** | Apenas os dados (arrays/objetos) são salvos na coleção principal |
+| **Limite de Payload** | Suporta requisições de até 1000mb (1GB) para grandes volumes de dados |
 
 ### Exemplo de Dados Armazenados
 
@@ -1000,16 +1002,15 @@ Contribuições são muito bem-vindas! Este projeto segue o padrão de [Conventi
 
 ## 📝 Changelog
 
-### Versão Atual: 2.2.1
+### Versão Atual: 2.3.0
 
 Para ver o histórico completo de mudanças, consulte o arquivo [CHANGELOG.md](CHANGELOG.md).
 
-#### Últimas Mudanças (v2.2.1)
+#### Últimas Mudanças (v2.3.0)
 
-- **� Correções**: Health check dinâmico com variável PORT no Dockerfile
-- **🐛 Correções**: Inicialização do servidor simplificada e mais resiliente
-- **�️ Removido**: Função `testConnection` desnecessária
-- **📝 Melhorado**: Redução de overhead e complexidade no startup
+- **✨ Novo**: Limite de payload aumentado para 1000mb (1GB)
+- **� Melhorado**: Suporte para backups de grandes volumes de dados
+- **🎯 Impacto**: Permite backup de coleções com milhares de documentos em uma única requisição
 
 [Ver changelog completo →](CHANGELOG.md)
 

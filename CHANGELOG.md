@@ -5,6 +5,27 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.3.0] - 2025-10-09
+
+### ✨ Adicionado
+
+- **Limite de payload para requisições**: Configurado limite de 1000mb (1GB) para processar grandes volumes de dados
+  - `express.json({ limit: "1000mb" })` - Suporta grandes payloads JSON
+  - `express.urlencoded({ limit: "1000mb", extended: true })` - Suporta grandes payloads URL-encoded
+  - Permite backups de coleções com milhares de documentos
+  - Elimina erro "PayloadTooLargeError" em requisições grandes
+
+### 📝 Melhorado
+
+- **Capacidade de backup**: Agora suporta backups de datasets muito maiores
+- **Flexibilidade**: Sistema preparado para processar grandes volumes de dados sem falhas
+
+### 🎯 Impacto
+
+- Usuários podem enviar backups de coleções com milhares de registros em uma única requisição
+- Melhora significativa na capacidade de processamento de dados
+- Ideal para backups de bases de dados volumosas
+
 ## [2.2.1] - 2025-10-08
 
 ### 🐛 Corrigido
@@ -238,6 +259,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ---
 
+[2.3.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.2.1...v2.3.0
 [2.2.1]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/GabrielFinotti/api-backup-service/compare/v2.0.1...v2.1.0

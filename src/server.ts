@@ -12,7 +12,8 @@ if (!PORT) {
   throw new Error("Defina a variável de ambiente PORT no arquivo .env");
 }
 
-app.use(express.json());
+app.use(express.json({ limit: "1000mb" }));
+app.use(express.urlencoded({ limit: "1000mb", extended: true }));
 
 app.get("/api/health", (_, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
